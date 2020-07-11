@@ -1,0 +1,64 @@
+---
+  - hosts: web
+  - name: Ensure EPEL is installed
+    yum:
+      name: EPEL-release
+      state: present
+    become: True
+  - name: Ensure libselinux-python is present
+    yum:
+      name: libselinux-python
+      state: present
+    become: True 
+  - name: Ensure libsemanage-python is present
+    yum:
+      name: libsemanage-python
+      state: present
+    become: True
+  - name: Ensure lastest rev is installed
+    yum:
+      name: "*"
+      state: lastest
+    become: True
+  - name: Ensure NTP is installed
+    yum:
+      name: NTP
+      state: present
+    become: True
+  - name: Ensure timezone is set to MST
+    file:
+      src: /usr/share/zoneinfo/MT
+      dest: /etc/localtime
+      state: link
+    become: True
+  - name: Ensure NTP service is installed and enabled
+    service:
+      name: NTP
+      state: started
+      enabled: True
+    become: True
+  - name: Ensure firewallD is present and enabled
+    yum:
+      name: firewallD
+      state: present
+    become: True
+  - name: Ensure firewallD allows ssh access
+    firewallD:
+      service: ssh
+      state: enabled
+      permanent: True
+      immediate: True
+    become: True
+  - name: Ensure MOTD file is present and updated
+    template:
+      src: motd
+      dest: /etc/motd
+      owner: root
+      group: root
+      mode: 0644
+    become: True
+  - name: Ensure the hostname matches that of the inventory file
+    hostname:
+      name: "{{ inventory_hostname }}"
+    become: True
+...

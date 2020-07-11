@@ -1,0 +1,12 @@
+---
+- hosts: all
+  remote_user: vagrant
+  tasks:
+    - name: Print OS and Version
+      debug:
+        msg: '{{ ansible_distribution }} {{ ansible_distribution_version }}'
+
+    - name: Print Variable 'name'
+      debug:
+        msg: '{{ name }}'    
+...
