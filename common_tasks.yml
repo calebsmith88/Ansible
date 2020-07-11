@@ -4,7 +4,7 @@
   tasks:
   - name: Ensure EPEL is installed
     yum:
-      name: EPEL-release
+      name: epel-release
       state: present
     become: True
   - name: Ensure libselinux-python is present
@@ -17,35 +17,42 @@
       name: libsemanage-python
       state: present
     become: True
-  - name: Ensure lastest rev is installed
+  - name: Ensure latest rev is installed
     yum:
       name: "*"
-      state: lastest
+      state: latest
     become: True
   - name: Ensure NTP is installed
     yum:
-      name: NTP
+      name: ntp
       state: present
     become: True
-  - name: Ensure timezone is set to MST
+  - name: Ensure timezone is set to Denver
     file:
-      src: /usr/share/zoneinfo/MT
+      src: /usr/share/zoneinfo/MST
       dest: /etc/localtime
       state: link
+      force: yes
     become: True
   - name: Ensure NTP service is installed and enabled
     service:
-      name: NTP
+      name: ntpd
       state: started
       enabled: True
     become: True
   - name: Ensure FirewallD is present and enabled
     yum:
-      name: firewallD
+      name: firewalld
       state: present
     become: True
+  - name: Ensure FirewallD is running
+    service:
+      name: firewalld
+      state: started
+      enabled: True
+    become: True
   - name: Ensure FirewallD allows ssh access
-    firewallD:
+    firewalld:
       service: ssh
       state: enabled
       permanent: True
