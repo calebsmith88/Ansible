@@ -39,12 +39,12 @@
       state: started
       enabled: True
     become: True
-  - name: Ensure firewallD is present and enabled
+  - name: Ensure FirewallD is present and enabled
     yum:
       name: firewallD
       state: present
     become: True
-  - name: Ensure firewallD allows ssh access
+  - name: Ensure FirewallD allows ssh access
     firewallD:
       service: ssh
       state: enabled
